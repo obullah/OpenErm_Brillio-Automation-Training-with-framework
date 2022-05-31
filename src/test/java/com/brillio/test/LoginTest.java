@@ -14,10 +14,17 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class LoginTest {
 	
+	WebDriver driver;
+	
 	@BeforeMethod
 	public void setup()
 	{
 		System.out.println("Before Method");
+		WebDriverManager.chromedriver().setup();
+		driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		driver.get("https://demo.openemr.io/b/openemr");
 	}
 	
 	@AfterMethod
@@ -31,11 +38,7 @@ public class LoginTest {
 	{
 		System.out.println("Valid");
 		//System.setProperty("webdriver.chrome.driver", "E:\\Softwares\\chromedriver.exe");
-		WebDriverManager.chromedriver().setup();
-		WebDriver driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-		driver.get("https://demo.openemr.io/b/openemr");
+		
 		driver.findElement(By.id("authUser")).sendKeys("admin");
 		driver.findElement(By.id("clearPass")).sendKeys("pass");
 		driver.findElement(By.cssSelector("#login-button")).click();
@@ -49,11 +52,6 @@ public class LoginTest {
 	{
 		System.out.println("Valid");
 		//System.setProperty("webdriver.chrome.driver", "E:\\Softwares\\chromedriver.exe");
-		WebDriverManager.chromedriver().setup();
-		WebDriver driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-		driver.get("https://demo.openemr.io/b/openemr");
 		driver.findElement(By.id("authUser")).sendKeys("john");
 		driver.findElement(By.id("clearPass")).sendKeys("1234");
 		driver.findElement(By.cssSelector("#login-button")).click();

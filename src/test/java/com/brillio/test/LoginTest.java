@@ -10,28 +10,11 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.brillio.base.WebDriverWrapper;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class LoginTest {
-	
-	WebDriver driver;
-	
-	@BeforeMethod
-	public void setup()
-	{
-		System.out.println("Before Method");
-		WebDriverManager.chromedriver().setup();
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-		driver.get("https://demo.openemr.io/b/openemr");
-	}
-	
-	@AfterMethod
-	public void setup1()
-	{
-		System.out.println("After Method");
-	}
+public class LoginTest extends WebDriverWrapper{
 	
 	@Test
 	public void validCredentialTest()

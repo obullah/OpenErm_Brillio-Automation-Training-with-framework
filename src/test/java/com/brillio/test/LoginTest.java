@@ -1,46 +1,41 @@
 package com.brillio.test;
 
-import java.time.Duration;
-
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.brillio.base.WebDriverWrapper;
+import com.brillio.utilities.DataUtils;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-
-public class LoginTest extends WebDriverWrapper{
-	
-	@Test
-	public void validCredentialTest()
-	{
-		System.out.println("Valid");
-		//System.setProperty("webdriver.chrome.driver", "E:\\Softwares\\chromedriver.exe");
+public class LoginTest extends WebDriverWrapper {
 		
-		driver.findElement(By.id("authUser")).sendKeys("admin");
-		driver.findElement(By.id("clearPass")).sendKeys("pass");
+	@Test(dataProviderClass = DataUtils.class,dataProvider = "validCredentialData")
+	public void validCredentialTest(String username,String password,String language,String expectedTitle) {
+		
+		driver.findElement(By.id("authUser")).sendKeys(username);
+		driver.findElement(By.id("clearPass")).sendKeys(password);
+		
+		Select selectLan=new Select(driver.findElement(By.xpath("//select[@name='languageChoice']")));
+		selectLan.selectByVisibleText(language);
+		
 		driver.findElement(By.cssSelector("#login-button")).click();
-		
-		String actualTitle= driver.getTitle();
-		Assert.assertEquals(actualTitle, "OpenEMR");
+
+		String actualTitle = driver.getTitle();
+		Assert.assertEquals(actualTitle, expectedTitle);
 	}
 	
 	@Test
 	public void invalidCredentialTest()
 	{
-		System.out.println("Valid");
-		//System.setProperty("webdriver.chrome.driver", "E:\\Softwares\\chromedriver.exe");
 		driver.findElement(By.id("authUser")).sendKeys("john");
-		driver.findElement(By.id("clearPass")).sendKeys("1234");
+		driver.findElement(By.id("clearPass")).sendKeys("john123");
 		driver.findElement(By.cssSelector("#login-button")).click();
 		
-		String actualError = driver.findElement(By.xpath("//div[contains(text(),'Invalid']")).getText();
+		String actualError=driver.findElement(By.xpath("//div[contains(text(),'Invalid')]")).getText().strip();
 		Assert.assertEquals(actualError, "Invalid username or password");
 	}
-
+	
+	
 }
